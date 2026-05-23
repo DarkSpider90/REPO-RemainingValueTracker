@@ -18,7 +18,7 @@ public sealed class Plugin : BaseUnityPlugin
 {
     internal const string PluginGuid = "DarkSpider90.RemainingValueTracker";
     internal const string PluginName = "Remaining Value Tracker";
-    internal const string PluginVersion = "0.1.0";
+    internal const string PluginVersion = "0.1.1";
 
     private const float DefaultScanInterval = 0.5f;
     private static readonly Color MessageColor = new(0.8f, 1f, 0.35f);
@@ -40,6 +40,7 @@ public sealed class Plugin : BaseUnityPlugin
     private ConfigEntry<TrackingMode> _trackingMode;
     private ConfigEntry<float> _triggerPercent;
     private ConfigEntry<float> _scanInterval;
+    private ConfigEntry<KeyboardShortcut> _revealHotkey;
     private ConfigEntry<bool> _showMessage;
     private ConfigEntry<float> _messageDuration;
     private ConfigEntry<string> _messageText;
@@ -83,6 +84,11 @@ public sealed class Plugin : BaseUnityPlugin
             new ConfigDescription(
                 "Seconds between tracker checks.",
                 new AcceptableValueRange<float>(0.1f, 5f)));
+        _revealHotkey = Config.Bind(
+            "Controls",
+            "Reveal Hotkey",
+            new KeyboardShortcut(KeyCode.F10),
+            "Press this key to reveal all remaining valuables immediately, as if the configured threshold was reached.");
         _showMessage = Config.Bind("UI", "Show Message", true, "Show a top-center message when remaining valuables are revealed.");
         _messageDuration = Config.Bind(
             "UI",
@@ -133,6 +139,11 @@ public sealed class Plugin : BaseUnityPlugin
             ResetRound(currentLevelId);
         }
 
+        if (TryRevealByHotkey())
+        {
+            return;
+        }
+
         if (_revealed || Time.time < _nextScanTime)
         {
             return;
@@ -162,6 +173,24 @@ public sealed class Plugin : BaseUnityPlugin
             Log.LogInfo($"Reveal threshold reached: {progress.Percent:0.##}% >= {triggerPercent:0.##}%.");
             RevealRemaining();
         }
+    }
+
+    private bool TryRevealByHotkey()
+    {
+        if (_revealed || !_revealHotkey.Value.IsDown())
+        {
+            return false;
+        }
+
+        if (!_snapshotReady && !TryBuildSnapshot())
+        {
+            Log.LogWarning("Reveal hotkey was pressed, but valuables are not ready to scan yet.");
+            return false;
+        }
+
+        Log.LogInfo("Reveal hotkey pressed.");
+        RevealRemaining();
+        return true;
     }
 
     private static bool LevelIsReady()

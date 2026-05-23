@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1
+
+- Added a configurable reveal hotkey.
+- Default reveal hotkey is F10.
+
 ## 0.1.0
 
 - Initial implementation.

@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>RemainingValueTracker</AssemblyName>
     <RootNamespace>RemainingValueTracker</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <LangVersion>latest</LangVersion>
     <RepoGamePath Condition="'$(RepoGamePath)' == ''">D:\Games\Steam\steamapps\common\REPO</RepoGamePath>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
