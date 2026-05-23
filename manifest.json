@@ -1,0 +1,9 @@
+{
+  "name": "RemainingValueTracker",
+  "version_number": "0.1.0",
+  "website_url": "",
+  "description": "Reveals remaining R.E.P.O. valuables after a configurable percent of item count or value has been discovered.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2305"
+  ]
+}

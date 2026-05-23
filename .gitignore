@@ -1,0 +1,13 @@
+# Build folders
+bin/
+obj/
+dist/
+
+# JetBrains
+.idea/
+
+# User/system files
+*.user
+*.suo
+.DS_Store
+Thumbs.db
